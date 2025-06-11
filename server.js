@@ -1,12 +1,21 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
+dotenv.config({ path: './config.env' });
 const app = require('./app');
 
-const DB = 'mongodb://127.0.0.1:27017/natours';
+const DB = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD
+);
+
 mongoose
-  .connect(DB)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err.message));
+  .connect(DB, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  })
+  .then(() => console.log('DB connection successful!'));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

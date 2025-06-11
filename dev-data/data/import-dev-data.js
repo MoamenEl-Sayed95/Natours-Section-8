@@ -1,13 +1,20 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
-
+const dotenv = require('dotenv');
 const Tour = require('./../../models/tourModel');
 
-const DB = 'mongodb://127.0.0.1:27017/natours';
+dotenv.config({ path: './config.env' });
+
+const DB = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD
+);
+
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useCreateIndex: true,
+    useFindAndModify: false
   })
   .then(() => console.log('DB connection successful!'));
 
